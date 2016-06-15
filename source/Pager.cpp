@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <time.h>
 using namespace std;
 
 Pager::Pager()
@@ -25,19 +26,23 @@ void Pager::ask_setting()
 
 void Pager::init()
 {
-    frames = new char[numberOf_frames];
+    frames = new int[numberOf_frames];
+    for (int i=0; i<numberOf_frames; i++)
+    {
+        frames[i] = -1;
+    }
+    
     make_pageReferenceString();
 }
 
 void Pager::make_pageReferenceString()
 {
-    pageReference_string = new char[lengthOf_pageReference];
-    int offset = -1;
+    pageReference_string = new int[lengthOf_pageReference];
     
+    srand(time(NULL));
     for(int i=0; i<lengthOf_pageReference; i++)
     {
-        offset = rand() % 10;
-        pageReference_string[i] = '0' + offset;
+        pageReference_string[i] = rand() % 100;
     }
 }
 
@@ -73,7 +78,12 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
             pageReplacement_Algorithm->informed_newPage(page_number);
         }
         
-        cout << "FRAME           : " << frames << endl; 
+        cout << "FRAME  :";         
+        for(int i=0; i<numberOf_frames; i++)
+        {
+            cout << ' ' << frames[i]; 
+        }
+        cout << endl << endl;
         //cout << "NUMBER OF PAGES : " << numberOf_pages << endl; 
     }
     cout << endl;
@@ -81,8 +91,13 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
 
 void Pager::show_string()
 {
-    cout << "PAGE REFERENCE STRING : " << pageReference_string << endl;
-    cout << endl;
+    cout << "PAGE REFERENCE STRING :";    
+    
+    for(int i=0; i<lengthOf_pageReference; i++)
+    {
+        cout << ' ' << pageReference_string[i]; 
+    }
+    cout << endl << endl;
 }
 
 bool Pager::is_inFrame(int page_number)
@@ -107,11 +122,11 @@ bool Pager::empty_exist()
     return false;
 }
 
-void Pager::load(char page_number)
+void Pager::load(int page_number)
 {
     for(int i=0; i<numberOf_frames; i++)
     {
-        if(frames[i] == 0)
+        if(frames[i] == -1)
         {
             load(page_number, i);
             break;
@@ -119,13 +134,13 @@ void Pager::load(char page_number)
     }
 }
 
-void Pager::load(char page_number, int frame_number)
+void Pager::load(int page_number, int frame_number)
 {
     frames[frame_number] = page_number;
     numberOf_pages ++;
 }
 
-int Pager::swapOut(char victim)
+int Pager::swapOut(int victim)
 {
     int i=0;
     
@@ -133,7 +148,7 @@ int Pager::swapOut(char victim)
     {
         if(frames[i] == victim)
         {
-            frames[i] = 0;
+            frames[i] = -1;
             break;
         }
     }
