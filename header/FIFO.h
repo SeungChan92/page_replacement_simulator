@@ -6,11 +6,10 @@ using namespace std;
 class FIFO: public PageReplacement_Algorithm
 {
 public:
-    FIFO(int numberOf_frames);
+    FIFO();
 
-    char select_victim();
-    void informed_newPage(char page_number);
+    int select_victim();
+    void informed_newPage(int page_number, bool page_fault);
 private:    
-    queue<char> myqueue;
-    int numberOf_frames;
+    queue<int> myqueue;
 };

@@ -9,8 +9,8 @@ class PageReplacement_Algorithm
 public:
     PageReplacement_Algorithm(string name);
 
-    virtual char select_victim() {};
-    virtual void informed_newPage(char page_number) {};
+    virtual int select_victim() {};
+    virtual void informed_newPage(int page_number, bool page_fault) {};
     void show_result();
     void pageFault();
 protected:

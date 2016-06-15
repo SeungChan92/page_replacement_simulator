@@ -14,6 +14,15 @@ int Pager::get_numberOfFrames()
 {
     return numberOf_frames;
 }
+int Pager::get_lengthOfPageReference()
+{
+    return lengthOf_pageReference;
+}
+int* Pager::get_pageReferenceString()
+{
+    return pageReference_string;
+}
+
 
 void Pager::ask_setting()
 {
@@ -26,13 +35,17 @@ void Pager::ask_setting()
 
 void Pager::init()
 {
-    frames = new int[numberOf_frames];
     for (int i=0; i<numberOf_frames; i++)
     {
         frames[i] = -1;
     }
     
-    make_pageReferenceString();
+    numberOf_pages = 0;
+}
+
+void Pager::make_frames()
+{
+    frames = new int[numberOf_frames];    
 }
 
 void Pager::make_pageReferenceString()
@@ -48,42 +61,58 @@ void Pager::make_pageReferenceString()
 
 void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
 {
+    //cout << "paging - 1" << endl << endl;
+    
     char page_number = 0;
     char victim = 0;
     int freed_frame = -1;
+    bool page_fault = 0;
     
     for(int i=0; i<lengthOf_pageReference; i++)
     {
         page_number = pageReference_string[i];
         
+        //cout << "paging - 2" << endl << endl;
+        
         if(is_inFrame(page_number))
         {
-            continue;
+            page_fault = 0;
+            //cout << "paging - 3" << endl << endl;  
         }
         else
         {
+            page_fault = 1;
+            //cout << "paging - 4" << endl << endl;    
+            
             pageReplacement_Algorithm->pageFault();
             
             if(empty_exist())
             {
+                //cout << "paging - 5" << endl << endl; 
+                
                 load(page_number);
             }
             else
             {
+                //cout << "paging - 6" << endl << endl; 
+                
                 victim = pageReplacement_Algorithm->select_victim();
                 freed_frame = swapOut(victim);
                 load(page_number, freed_frame);
-            }
-            
-            pageReplacement_Algorithm->informed_newPage(page_number);
+            }            
         }
         
-        cout << "FRAME  :";         
-        for(int i=0; i<numberOf_frames; i++)
+        pageReplacement_Algorithm->informed_newPage(page_number, page_fault);
+        
+        if(page_fault)
         {
-            cout << ' ' << frames[i]; 
+            cout << "FRAME  :";         
+            for(int i=0; i<numberOf_frames; i++)
+            {
+                cout << ' ' << frames[i]; 
+            }
+            cout << endl << endl;
         }
-        cout << endl << endl;
         //cout << "NUMBER OF PAGES : " << numberOf_pages << endl; 
     }
     cout << endl;

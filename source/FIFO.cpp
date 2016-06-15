@@ -1,21 +1,19 @@
 #include "../header/FIFO.h"
 
-FIFO::FIFO(int numberOf_frames)
-    : PageReplacement_Algorithm("FIFO")
-{
-    this->numberOf_frames = numberOf_frames;
-}
+FIFO::FIFO()
+    : PageReplacement_Algorithm("FIFO") { }
 
-char FIFO::select_victim()
+int FIFO::select_victim()
 {
-    char victim = myqueue.front();
+    int victim = myqueue.front();
     myqueue.pop();
     return victim;
 }
 
-void FIFO::informed_newPage(char page_number)
+void FIFO::informed_newPage(int page_number, bool page_fault)
 {
-    if(myqueue.size() == numberOf_frames) return;
-    
-    myqueue.push(page_number);
+    if(page_fault)
+    {
+        myqueue.push(page_number);        
+    }    
 }
