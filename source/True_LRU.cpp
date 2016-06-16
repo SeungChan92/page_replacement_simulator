@@ -7,6 +7,12 @@ int True_LRU::select_victim()
 {
     int victim = mylist.front();
     mylist.pop_front();
+    
+    if(is_dirty(victim))
+    {
+        elapsed_time += 8;
+    }
+    
     return victim;
 }
 
@@ -15,6 +21,7 @@ void True_LRU::informed_newPage(int page_number, bool page_fault)
     if(page_fault)
     {
         numberOf_pageFaults ++;
+        elapsed_time += 8;
     }
     else
     {

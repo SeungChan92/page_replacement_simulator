@@ -40,6 +40,11 @@ int OPT::select_victim()
     inMemory.erase(farthest_page);
 
     //cout << endl;
+    
+    if(is_dirty(victim))
+    {
+        elapsed_time += 8;
+    }
 
     return victim;
 }
@@ -49,9 +54,11 @@ void OPT::informed_newPage(int page_number, bool page_fault)
     numberOf_loaded ++;
     
     if(page_fault)
-    {   
-        numberOf_pageFaults ++;
+    {
         inMemory.push_front(page_number);
+        
+        elapsed_time += 8;   
+        numberOf_pageFaults ++;
     }
 }
 

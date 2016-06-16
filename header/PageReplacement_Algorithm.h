@@ -16,6 +16,8 @@ protected:
     string name;
     int numberOf_pageFaults;
     int elapsed_time;
+    
+    bool is_dirty(int page_number);
 };
 
 #endif //PageReplacement_Algorithm_h__

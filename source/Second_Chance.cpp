@@ -58,6 +58,11 @@ int Second_Chance::select_victim()
         }
     }
     
+    if(is_dirty(victim))
+    {
+        elapsed_time += 8;
+    }
+    
     return victim;
 }
 
@@ -65,8 +70,10 @@ void Second_Chance::informed_newPage(int page_number, bool page_fault)
 {
     if(page_fault)
     {
-        numberOf_pageFaults ++;
         mylist.insert(cursor, new Node(page_number, 0));
+        
+        numberOf_pageFaults ++;
+        elapsed_time += 8;
     }
     else
     {
