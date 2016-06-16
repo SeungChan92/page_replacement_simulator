@@ -50,6 +50,7 @@ void OPT::informed_newPage(int page_number, bool page_fault)
     
     if(page_fault)
     {   
+        numberOf_pageFaults ++;
         inMemory.push_front(page_number);
     }
 }

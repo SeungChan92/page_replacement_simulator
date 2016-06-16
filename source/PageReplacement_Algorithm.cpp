@@ -15,8 +15,3 @@ void PageReplacement_Algorithm::show_result()
     cout << "PAGE FAULTS : " << numberOf_pageFaults << endl;
     cout << endl;
 }
-
-void PageReplacement_Algorithm::pageFault()
-{
-    numberOf_pageFaults ++;
-}

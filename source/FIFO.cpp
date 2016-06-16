@@ -14,6 +14,7 @@ void FIFO::informed_newPage(int page_number, bool page_fault)
 {
     if(page_fault)
     {
+        numberOf_pageFaults ++;
         myqueue.push(page_number);        
     }    
 }

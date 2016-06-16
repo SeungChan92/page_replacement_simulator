@@ -84,8 +84,6 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
             page_fault = 1;
             //cout << "paging - 4" << endl << endl;    
             
-            pageReplacement_Algorithm->pageFault();
-            
             if(empty_exist())
             {
                 //cout << "paging - 5" << endl << endl; 
@@ -113,7 +111,6 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
             }
             cout << endl << endl;
         }
-        //cout << "NUMBER OF PAGES : " << numberOf_pages << endl; 
     }
     cout << endl;
 }

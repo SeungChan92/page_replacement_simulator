@@ -12,7 +12,6 @@ public:
     virtual int select_victim() {};
     virtual void informed_newPage(int page_number, bool page_fault) {};
     void show_result();
-    void pageFault();
 protected:
     string name;
     int numberOf_pageFaults;
