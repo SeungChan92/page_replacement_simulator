@@ -1,3 +1,6 @@
+#ifndef Second_Chance_h__
+#define Second_Chance_h__
+
 #include "PageReplacement_Algorithm.h"
 
 #include <list>
@@ -8,17 +11,18 @@ class Second_Chance: public PageReplacement_Algorithm
 public:
     Second_Chance();
 
-    int select_victim();
-    void informed_newPage(int page_number, bool page_fault);
-private:
+    Page* select_victim();
+    void informed_newPage(Page *page, bool page_fault);
+    
+protected:
     struct Node
     {
-        int page_number;
+        Page *page;
         bool reference_bit;
         
-        Node(int page_number, bool reference_bit)
+        Node(Page *page, bool reference_bit)
         {
-            this->page_number = page_number;
+            this->page = page;
             this->reference_bit = reference_bit;
         };
     };
@@ -26,3 +30,5 @@ private:
     list<Node*> mylist;
     list<Node*>::iterator cursor;
 };
+
+#endif //Second_Chance_h__

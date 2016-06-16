@@ -2,6 +2,7 @@
 #define Pager_h__
 
 #include "PageReplacement_Algorithm.h"
+#include "Page.h"
 
 class Pager
 {
@@ -10,7 +11,7 @@ public:
 
     int get_numberOfFrames();
     int get_lengthOfPageReference();
-    int* get_pageReferenceString();
+    Page** get_pageReferenceString();
 
     void ask_setting();
     void make_frames();
@@ -19,17 +20,17 @@ public:
     void paging(PageReplacement_Algorithm*);
     void show_string();
 private:
-    int* frames;
-    int* pageReference_string;
+    Page **frames;
+    Page **pageReference_string;
     int numberOf_frames;
     int lengthOf_pageReference;
     int numberOf_pages;
 
-    bool is_inFrame(int page_number);
+    bool is_inFrame(Page *page);
     bool empty_exist();
-    void load(int page_number);
-    void load(int page_number, int frame_number);
-    int swapOut(int victim);
+    void load(Page *page);
+    void load(Page *page, int frame_number);
+    int swapOut(Page *victim);
 };
 
 #endif //Pager_h__

@@ -3,12 +3,12 @@
 True_LRU::True_LRU()
     : PageReplacement_Algorithm("True LRU") { }
 
-int True_LRU::select_victim()
+Page* True_LRU::select_victim()
 {
-    int victim = mylist.front();
+    Page* victim = mylist.front();
     mylist.pop_front();
     
-    if(is_dirty(victim))
+    if(victim->is_dirty())
     {
         elapsed_time += 8;
     }
@@ -16,7 +16,7 @@ int True_LRU::select_victim()
     return victim;
 }
 
-void True_LRU::informed_newPage(int page_number, bool page_fault)
+void True_LRU::informed_newPage(Page *page, bool page_fault)
 {
     if(page_fault)
     {
@@ -25,7 +25,16 @@ void True_LRU::informed_newPage(int page_number, bool page_fault)
     }
     else
     {
-        mylist.remove(page_number);       
+        for(list<Page*>::iterator it=mylist.begin()
+                ; it != mylist.end()
+                ; ++it)
+        {
+            if((*it)->number == page->number)
+            {
+                mylist.erase(it);
+                break;
+            }
+        }       
     }
-    mylist.push_back(page_number);
+    mylist.push_back(page);
 }

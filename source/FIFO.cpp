@@ -3,12 +3,12 @@
 FIFO::FIFO()
     : PageReplacement_Algorithm("FIFO") { }
 
-int FIFO::select_victim()
+Page* FIFO::select_victim()
 {
-    int victim = myqueue.front();
+    Page *victim = myqueue.front();
     myqueue.pop();
     
-    if(is_dirty(victim))
+    if(victim->is_dirty())
     {
         elapsed_time += 8;
     }
@@ -16,11 +16,11 @@ int FIFO::select_victim()
     return victim;
 }
 
-void FIFO::informed_newPage(int page_number, bool page_fault)
+void FIFO::informed_newPage(Page *page, bool page_fault)
 {
     if(page_fault)
     {
-        myqueue.push(page_number);
+        myqueue.push(page);
         
         numberOf_pageFaults ++;
         elapsed_time += 8;

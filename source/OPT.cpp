@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-OPT::OPT(int *pageReference_string, int lengthOf_pageReference)
+OPT::OPT(Page **pageReference_string, int lengthOf_pageReference)
     : PageReplacement_Algorithm("OPT")
 {
     this->pageReference_string = pageReference_string;
@@ -11,14 +11,14 @@ OPT::OPT(int *pageReference_string, int lengthOf_pageReference)
     numberOf_loaded = 0;
 }
 
-int OPT::select_victim()
+Page* OPT::select_victim()
 {
-    int victim = -1;
+    Page *victim = NULL;
     int next_reference = -1;
     int farthest_distance = -1;
-    list<int>::iterator farthest_page;
+    list<Page*>::iterator farthest_page;
     
-    for(list<int>::iterator it = inMemory.begin()
+    for(list<Page*>::iterator it = inMemory.begin()
             ; it != inMemory.end()
             ; ++it)
     {
@@ -41,7 +41,7 @@ int OPT::select_victim()
 
     //cout << endl;
     
-    if(is_dirty(victim))
+    if(victim->is_dirty())
     {
         elapsed_time += 8;
     }
@@ -49,25 +49,25 @@ int OPT::select_victim()
     return victim;
 }
 
-void OPT::informed_newPage(int page_number, bool page_fault)
+void OPT::informed_newPage(Page *page, bool page_fault)
 {
     numberOf_loaded ++;
     
     if(page_fault)
     {
-        inMemory.push_front(page_number);
+        inMemory.push_front(page);
         
         elapsed_time += 8;   
         numberOf_pageFaults ++;
     }
 }
 
-int OPT::identify_nextReference(int page_number)
+int OPT::identify_nextReference(Page *page)
 {
     int i = numberOf_loaded;
     for(; i<lengthOf_pageReference; i++)
     {
-        if(page_number == pageReference_string[i]) break;
+        if(page->number == pageReference_string[i]->number) break;
     }
     
     return i;

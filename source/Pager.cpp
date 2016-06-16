@@ -18,7 +18,7 @@ int Pager::get_lengthOfPageReference()
 {
     return lengthOf_pageReference;
 }
-int* Pager::get_pageReferenceString()
+Page** Pager::get_pageReferenceString()
 {
     return pageReference_string;
 }
@@ -37,7 +37,7 @@ void Pager::init()
 {
     for (int i=0; i<numberOf_frames; i++)
     {
-        frames[i] = -1;
+        frames[i] = NULL;
     }
     
     numberOf_pages = 0;
@@ -45,17 +45,17 @@ void Pager::init()
 
 void Pager::make_frames()
 {
-    frames = new int[numberOf_frames];    
+    frames = new Page*[numberOf_frames];    
 }
 
 void Pager::make_pageReferenceString()
 {
-    pageReference_string = new int[lengthOf_pageReference];
+    pageReference_string = new Page*[lengthOf_pageReference];
     
     srand(time(NULL));
     for(int i=0; i<lengthOf_pageReference; i++)
     {
-        pageReference_string[i] = rand() % 100;
+        pageReference_string[i] = new Page(rand() % 100, rand() % 2);
     }
 }
 
@@ -63,18 +63,18 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
 {
     //cout << "paging - 1" << endl << endl;
     
-    char page_number = 0;
-    char victim = 0;
+    Page *page;
+    Page *victim = 0;
     int freed_frame = -1;
     bool page_fault = 0;
     
     for(int i=0; i<lengthOf_pageReference; i++)
     {
-        page_number = pageReference_string[i];
+        page = pageReference_string[i];
         
         //cout << "paging - 2" << endl << endl;
         
-        if(is_inFrame(page_number))
+        if(is_inFrame(page))
         {
             page_fault = 0;
             //cout << "paging - 3" << endl << endl;  
@@ -88,7 +88,7 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
             {
                 //cout << "paging - 5" << endl << endl; 
                 
-                load(page_number);
+                load(page);
             }
             else
             {
@@ -96,18 +96,26 @@ void Pager::paging(PageReplacement_Algorithm* pageReplacement_Algorithm)
                 
                 victim = pageReplacement_Algorithm->select_victim();
                 freed_frame = swapOut(victim);
-                load(page_number, freed_frame);
+                load(page, freed_frame);
             }            
         }
         
-        pageReplacement_Algorithm->informed_newPage(page_number, page_fault);
+        pageReplacement_Algorithm->informed_newPage(page, page_fault);
         
         if(page_fault)
         {
             cout << "FRAME  :";         
             for(int i=0; i<numberOf_frames; i++)
             {
-                cout << ' ' << frames[i]; 
+                cout << ' ';
+                if(frames[i] == NULL)
+                {
+                    cout << 0;
+                }
+                else
+                {
+                    cout << frames[i]->number << '-' << frames[i]->dirty;
+                } 
             }
             cout << endl << endl;
         }
@@ -121,16 +129,20 @@ void Pager::show_string()
     
     for(int i=0; i<lengthOf_pageReference; i++)
     {
-        cout << ' ' << pageReference_string[i]; 
+        cout << ' ' << pageReference_string[i]->number; 
     }
     cout << endl << endl;
 }
 
-bool Pager::is_inFrame(int page_number)
+bool Pager::is_inFrame(Page *page)
 {
+    //cout << "is_inFrame() - page -> number      : " << page->number << endl;
+    
     for(int i=0; i<numberOf_frames; i++)
     {
-        if(page_number == frames[i])
+        if(frames[i] == NULL) continue;
+        
+        if(page->number == frames[i]->number)
         {
             return true;
         }
@@ -148,33 +160,33 @@ bool Pager::empty_exist()
     return false;
 }
 
-void Pager::load(int page_number)
+void Pager::load(Page *page)
 {
     for(int i=0; i<numberOf_frames; i++)
     {
-        if(frames[i] == -1)
+        if(frames[i] == NULL)
         {
-            load(page_number, i);
+            load(page, i);
             break;
         }
     }
 }
 
-void Pager::load(int page_number, int frame_number)
+void Pager::load(Page *page, int frame_number)
 {
-    frames[frame_number] = page_number;
+    frames[frame_number] = page;
     numberOf_pages ++;
 }
 
-int Pager::swapOut(int victim)
+int Pager::swapOut(Page *victim)
 {
     int i=0;
     
     for(; i<numberOf_frames; i++)
     {
-        if(frames[i] == victim)
+        if(frames[i]->number == victim->number)
         {
-            frames[i] = -1;
+            frames[i] = NULL;
             break;
         }
     }

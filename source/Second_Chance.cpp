@@ -9,9 +9,9 @@ Second_Chance::Second_Chance()
     cursor = mylist.end();
 }
 
-int Second_Chance::select_victim()
+Page* Second_Chance::select_victim()
 {    
-    int victim = -1;
+    Page* victim = NULL;
     
     while(true)
     {
@@ -40,7 +40,7 @@ int Second_Chance::select_victim()
         }
         else
         {
-            victim = (*cursor)->page_number;
+            victim = (*cursor)->page;
             cursor = mylist.erase(cursor);
             
             /*
@@ -58,7 +58,7 @@ int Second_Chance::select_victim()
         }
     }
     
-    if(is_dirty(victim))
+    if(victim->is_dirty())
     {
         elapsed_time += 8;
     }
@@ -66,11 +66,11 @@ int Second_Chance::select_victim()
     return victim;
 }
 
-void Second_Chance::informed_newPage(int page_number, bool page_fault)
+void Second_Chance::informed_newPage(Page *page, bool page_fault)
 {
     if(page_fault)
     {
-        mylist.insert(cursor, new Node(page_number, 0));
+        mylist.insert(cursor, new Node(page, 0));
         
         numberOf_pageFaults ++;
         elapsed_time += 8;
@@ -81,7 +81,7 @@ void Second_Chance::informed_newPage(int page_number, bool page_fault)
                 ; it != mylist.end()
                 ; ++it)
         {
-            if((*it)->page_number == page_number)
+            if((*it)->page->number == page->number)
             {
                 (*it)->reference_bit = 1;
                 break;

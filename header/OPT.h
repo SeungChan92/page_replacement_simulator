@@ -6,15 +6,15 @@ using namespace std;
 class OPT: public PageReplacement_Algorithm
 {
 public:
-    OPT(int *pageReference_string, int lengthOf_pageReference);
+    OPT(Page **pageReference_string, int lengthOf_pageReference);
 
-    int select_victim();
-    void informed_newPage(int page_number, bool page_fault);
+    Page* select_victim();
+    void informed_newPage(Page *page, bool page_fault);
 private:    
-    list<int> inMemory;
-    int *pageReference_string;
+    list<Page*> inMemory;
+    Page **pageReference_string;
     int lengthOf_pageReference;
     int numberOf_loaded;
     
-    int identify_nextReference(int page_number);
+    int identify_nextReference(Page *page);
 };

@@ -17,12 +17,3 @@ void PageReplacement_Algorithm::show_result()
     cout << "ELAPSED TIME : " << elapsed_time << " ms" << endl;
     cout << endl;
 }
-
-bool PageReplacement_Algorithm::is_dirty(int page_number)
-{
-    if(page_number >= 50)
-    {
-        return true;
-    }
-    return false;
-}

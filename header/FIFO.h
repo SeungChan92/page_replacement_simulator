@@ -8,8 +8,8 @@ class FIFO: public PageReplacement_Algorithm
 public:
     FIFO();
 
-    int select_victim();
-    void informed_newPage(int page_number, bool page_fault);
+    Page* select_victim();
+    void informed_newPage(Page *page, bool page_fault);
 private:    
-    queue<int> myqueue;
+    queue<Page*> myqueue;
 };
