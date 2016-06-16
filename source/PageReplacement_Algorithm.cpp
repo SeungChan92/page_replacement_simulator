@@ -7,6 +7,7 @@ PageReplacement_Algorithm::PageReplacement_Algorithm(string name)
 {
     this->name = name;
     numberOf_pageFaults = 0;
+    elapsed_time = 0;
 }
 
 void PageReplacement_Algorithm::show_result()

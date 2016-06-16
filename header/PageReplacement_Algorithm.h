@@ -15,6 +15,7 @@ public:
 protected:
     string name;
     int numberOf_pageFaults;
+    int elapsed_time;
 };
 
 #endif //PageReplacement_Algorithm_h__

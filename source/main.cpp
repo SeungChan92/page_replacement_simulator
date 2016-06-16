@@ -2,11 +2,13 @@
 #include "../header/PageReplacement_Algorithm.h"
 #include "../header/FIFO.h"
 #include "../header/OPT.h"
+#include "../header/True_LRU.h"
+#include "../header/Second_Chance.h"
 
 #include <iostream>
 using namespace std;
 
-int numberOf_Algorithms = 2; 
+int numberOf_Algorithms = 4; 
 
 int main()
 {
@@ -18,6 +20,8 @@ int main()
     PageReplacement_Algorithm *pageReplacement_Algorithm[numberOf_Algorithms];
     pageReplacement_Algorithm[0] = new FIFO();
     pageReplacement_Algorithm[1] = new OPT(pager.get_pageReferenceString(), pager.get_lengthOfPageReference());
+    pageReplacement_Algorithm[2] = new True_LRU();
+    pageReplacement_Algorithm[3] = new Second_Chance();
     
     for(int i=0; i<numberOf_Algorithms; i++)
     {
